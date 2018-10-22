@@ -19,7 +19,6 @@
 
     .state {
       fill: #fff;
-      stroke-width: 4px;
       opacity: 1;
       transition: all 0.2s ease-in-out;
     }
@@ -79,14 +78,16 @@
 
     .legend-bar {
       font-family: $font_inconsolata;
-      flex: 0 0 200px;
+      flex: 0 0 224px;
       width: 100%;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       position: relative;
       margin-left: 36px;
       background-color: #fff;
       padding: 6px;
+      line-height: 1.2;
       &:before {
         content: '';
         display: block;
@@ -97,14 +98,17 @@
         height: 150%;
         background-color: #000;
       }
-      span {
+      > div {
         padding-left: 12px;
-        font-size: 0.9rem;
+        font-size: 1rem;
+        .min-max {
+          font-size: 0.9rem;
+        }
       }
     }
 
     .countries {
-      flex: 0 0 calc(100% - 250px);
+      flex: 0 0 calc(100% - 300px);
       display: flex;
       align-items: center;
       flex-wrap: wrap;
@@ -135,9 +139,9 @@
             transition: 0.2s;
           }
 
-          &:hover:not(.all):before {
-            border: 1px solid #eae134;
-          }
+          // &:hover:not(.all):before {
+          //   border: 1px solid #eae134;
+          // }
 
           &.all:before {
             background-color: #eae134;
@@ -183,10 +187,10 @@
             cursor: pointer;
           }
 
-          &.all:checked + label::after {
-            cursor: default;
-            border: none;
-          }
+          // &.all:checked + label::after {
+          //   cursor: default;
+          //   border: none;
+          // }
         }
       }
     }
