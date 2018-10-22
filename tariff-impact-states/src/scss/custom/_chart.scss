@@ -6,7 +6,12 @@
   svg {
     transform: transform3d(0, 0, 0);
   }
-
+  .stateModal tspan:nth-child(n + 2) {
+    font-size: 15px;
+  }
+  .stateModal tspan:nth-child(1) {
+    font-weight: bold;
+  }
   .group {
     // transform: scaleX(-1);
     cursor: pointer;
@@ -18,7 +23,6 @@
     }
 
     .state {
-      fill: #fff;
       opacity: 1;
       transition: all 0.2s ease-in-out;
     }

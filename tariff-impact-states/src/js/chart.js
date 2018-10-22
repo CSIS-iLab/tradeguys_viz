@@ -14,6 +14,7 @@ const container = select('.chart')
 const rows = 8
 const columns = 11
 const padding = 12
+const modalPadding = 48
 
 let chart,
   width,
@@ -22,7 +23,8 @@ let chart,
   borderColorScale,
   borderWidthScale,
   fillScale,
-  keyFilter = countries
+  keyFilter = countries,
+  diff = []
 
 function draw(data) {
   borderColorScale = scaleLog()
@@ -40,6 +42,10 @@ function draw(data) {
       })
     )
     .range(['1', '5'])
+
+  fillScale = scaleOrdinal()
+    .domain([...countries, 'other'])
+    .range(colors)
 
   function drawPercents() {
     fillScale = scaleOrdinal()
@@ -68,7 +74,7 @@ function draw(data) {
 
       let percent = []
 
-      let diff = countries.filter(i => keyFilter.indexOf(i) < 0)
+      diff = countries.filter(i => keyFilter.indexOf(i) < 0)
 
       diff.forEach(c => {
         percent = percent.concat(percentObj[c])
@@ -91,31 +97,33 @@ function draw(data) {
       let percents = select(nodes[gi]).selectAll(`.percent.${g.code}`)
 
       percents
-        .attr('height', (cellSize - padding / 2) / 10)
+        .attr('height', (cellSize - padding) / 10)
         .transition(transition().duration(1200))
         .attr('height', 0)
         .remove()
 
       percents = select(nodes[gi])
         .selectAll(`.percent.${g.code}`)
-        .data(percent, function(d, i) {
-          return d
-        })
+        .data(percent)
         .enter()
         .append('rect')
-        .attr('class', 'percent ' + g.code)
+        .attr('class', function(d) {
+          return `percent ${g.code} ${d.country}`
+        })
 
         .attr('fill', function(d) {
           return fillScale(d.country)
         })
 
         .attr('x', function(d, di) {
-          let switchIndex = percent.findIndex(p => p.country === keyFilter[0])
+          let switchIndex = percent.findIndex(
+            p => ![...diff, 'other'].includes(p.country)
+          )
 
-          switchIndex = switchIndex >= 0 ? switchIndex + 10 : null
+          switchIndex = switchIndex >= 0 ? switchIndex : null
 
           let reverse =
-            Math.ceil((di + 1) / 10) * 10 <= switchIndex
+            Math.ceil((di + 1) / 10) * 10 <= Math.ceil(switchIndex / 10) * 10
               ? Math.abs(99 - di)
               : di
 
@@ -141,14 +149,10 @@ function draw(data) {
 
       label = select(nodes[gi])
         .selectAll(`.label.${g.code}`)
-        .data([g], function(d) {
-          return d.code
-        })
+        .data([g])
         .enter()
         .append('text')
-        .attr('class', function(d) {
-          return 'label ' + g.code
-        })
+        .attr('class', 'label ' + g.code)
 
       label
         .attr('x', function(d) {
@@ -158,10 +162,186 @@ function draw(data) {
           return (d.row - 1) * cellSize + (cellSize / 2 - 3) + padding * d.row
         })
         .style('text-anchor', 'middle')
-        .text(function(d) {
-          return g.code
-        })
+        .text(g.code)
     })
+
+    selectAll('.group').on('click', interactions.states.click)
+  }
+
+  function drawState(x, d) {
+    let stateData = data.filter(state => state.code === d.code)
+    width = drawGridMap.width()
+    height = drawGridMap.width() * 0.67
+    let stateSize = height * 0.45
+    let svg = container.selectAll('.map')
+
+    container.selectAll('.gridmap')
+
+    svg.append('g').attr('class', 'stateModal')
+
+    select('.stateModal')
+      .append('rect')
+      .attr('width', width * 0.75)
+      .attr('height', height * 0.67)
+      .attr('x', width / 7.5)
+      .attr('y', width / 7.5)
+      .attr('fill', '#fff')
+      .attr('stroke', '#000')
+      .attr('stroke-width', '1.5px')
+      .attr('paint-order', 'stroke')
+      .attr('opacity', '0.9')
+
+    select('.stateModal')
+      .append('text')
+      .text('X')
+      .attr('class', 'exit')
+      .attr('fill', '#000')
+      .attr('width', width / 10)
+      .attr('height', height / 10)
+      .attr('cursor', 'pointer')
+      .attr('x', width - width / 7.5 - padding)
+      .attr('y', width / 7.5 + padding * 2)
+      .on('click', () => {
+        select('.stateModal').remove()
+      })
+
+    select('.stateModal')
+      .selectAll('.stateBorder')
+      .data(stateData)
+      .enter()
+      .append('rect')
+      .attr('class', 'stateBorder')
+      .attr('fill', '#fff')
+      .attr('stroke', function(d) {
+        return borderColorScale(d.totaldollars)
+      })
+      .attr('stroke-width', function(d) {
+        return borderWidthScale(d.totaldollars)
+      })
+      .attr('x', width / 5)
+      .attr('y', width / 5)
+      .attr('width', stateSize - 3)
+      .attr('height', stateSize - 2)
+
+    let percentObj = {}
+    countries.forEach(country => {
+      percentObj[country] = Array(
+        Math.round((stateData[0][country] / 100) * 100)
+      ).fill({
+        state: stateData[0].code,
+        country: country
+      })
+    })
+
+    let percent = []
+
+    diff = countries.filter(i => keyFilter.indexOf(i) < 0)
+
+    diff.forEach(c => {
+      percent = percent.concat(percentObj[c])
+    })
+
+    keyFilter.forEach(c => {
+      percent = percent.concat(percentObj[c])
+    })
+
+    percent = Array(100 - percent.length)
+      .fill({
+        state: stateData[0].code,
+        country: 'other'
+      })
+      .concat(percent)
+
+    let parentX = select('.stateBorder').attr('x')
+    let parentY = select('.stateBorder').attr('y')
+
+    let percents = select('.stateModal')
+      .selectAll(`.percentModal.${stateData[0].code}`)
+      .data(percent)
+      .enter()
+      .append('rect')
+      .attr('class', function(d) {
+        return `percent ${stateData[0].code} ${d.country}`
+      })
+
+      .attr('fill', function(d) {
+        return fillScale(d.country)
+      })
+
+      .attr('x', function(d, di) {
+        let switchIndex = percent.findIndex(
+          p => ![...diff, 'other'].includes(p.country)
+        )
+
+        switchIndex = switchIndex >= 0 ? switchIndex : null
+
+        let reverse =
+          Math.ceil((di + 1) / 10) * 10 <= Math.ceil(switchIndex / 10) * 10
+            ? Math.abs(99 - di)
+            : di
+
+        let x = ((reverse % 10) * (stateSize - 2)) / 10 + parseInt(parentX, 10)
+        return x + 2
+      })
+      .attr('y', function(d, di) {
+        let y =
+          (Math.ceil((di + 1) / 10) * (stateSize - 2)) / 10 +
+          parseInt(parentY, 10) -
+          stateSize / 10 +
+          1
+        return y + 2
+      })
+      .attr('height', 0)
+      .attr('width', (stateSize - modalPadding) / 10)
+      .attr('height', (stateSize - modalPadding) / 10)
+
+    let column2 = parseInt(parentX, 10) + stateSize + padding
+
+    select('.stateModal')
+      .selectAll(`.modalLabel`)
+      .data(stateData)
+      .enter()
+      .append('text')
+      .attr('class', 'modalLabel')
+      .attr('x', column2)
+      .attr('y', parseInt(parentY, 10) - padding)
+
+    let details = select(`.modalLabel`)
+      .selectAll('tspan')
+      .data(stateData)
+      .enter()
+
+    details
+      .append('tspan')
+      .text(stateData[0].state)
+      .attr('dy', '1.5em')
+      .attr('x', column2)
+
+    details
+      .append('tspan')
+      .text(
+        `$${formatter(stateData[0].totaldollars).replace(/G/, 'B')} Total Trade`
+      )
+      .attr('dy', '1.5em')
+      .attr('x', column2)
+
+    countries.forEach(c => {
+      details
+        .append('tspan')
+        .text(
+          `${c.charAt(0).toUpperCase() + c.slice(1)}: ${formatter(
+            stateData[0][c]
+          )}%`
+        )
+        .attr('dy', '1.5em')
+        .attr('x', column2)
+    })
+
+    details
+      .append('tspan')
+      .text(`${formatter(stateData[0].grandtotal)}% of Total Trade`)
+      .attr('dy', '1.5em')
+      .attr('x', column2)
   }
 
   function drawGridMap() {
@@ -229,9 +409,7 @@ function draw(data) {
       ? gridMap.selectAll('.group')
       : gridMap
           .selectAll('.group')
-          .data(data, function(d) {
-            return d.code
-          })
+          .data(data)
           .enter()
           .append('g')
           .attr('class', function(d) {
@@ -239,9 +417,7 @@ function draw(data) {
           })
 
     groups
-      .data(data, function(d) {
-        return d.code
-      })
+      .data(data)
       .attr('x', function(d) {
         return (d.col - 1) * cellSize + padding * d.col
       })
@@ -258,9 +434,7 @@ function draw(data) {
         ? select(nodes[gi]).selectAll(`.state.${g.code}`)
         : select(nodes[gi])
             .selectAll('.state')
-            .data([g], function(d) {
-              return d.code
-            })
+            .data([g])
             .enter()
             .append('rect')
             .attr('class', function(d) {
@@ -268,6 +442,7 @@ function draw(data) {
             })
 
       state
+        .attr('fill', '#fff')
         .attr('stroke', function(d) {
           return borderColorScale(d.totaldollars)
         })
@@ -282,98 +457,6 @@ function draw(data) {
         })
         .attr('width', cellSize + 2)
         .attr('height', cellSize + 2)
-
-      fillScale = scaleOrdinal()
-        .domain([...countries, 'other'])
-        .range(
-          colors.map((color, i) => {
-            let indices = []
-            keyFilter.forEach(country => {
-              indices.push([...countries, 'other'].indexOf(country))
-            })
-            return !indices.includes(i) ? '#fff' : color
-          })
-        )
-
-      let groups = selectAll('.group')
-
-      let percentObj = {}
-
-      countries.forEach(country => {
-        percentObj[country] = Array(Math.round((g[country] / 100) * 100)).fill({
-          state: g.code,
-          country: country
-        })
-      })
-
-      let percent = []
-
-      let diff = countries.filter(i => keyFilter.indexOf(i) < 0)
-
-      diff.forEach(c => {
-        percent = percent.concat(percentObj[c])
-      })
-
-      keyFilter.forEach(c => {
-        percent = percent.concat(percentObj[c])
-      })
-
-      percent = Array(100 - percent.length)
-        .fill({
-          state: g.code,
-          country: 'other'
-        })
-        .concat(percent)
-
-      let parentX = select(nodes[gi]).attr('x')
-      let parentY = select(nodes[gi]).attr('y')
-
-      let percents = select(nodes[gi]).selectAll(`.percent.${g.code}`)
-
-      percents
-        .attr('height', (cellSize - padding / 2) / 10)
-        .transition(transition().duration(1200))
-        .attr('height', 0)
-        .remove()
-
-      percents = select(nodes[gi])
-        .selectAll(`.percent.${g.code}`)
-        .data(percent, function(d, i) {
-          return d
-        })
-        .enter()
-        .append('rect')
-        .attr('class', 'percent ' + g.code)
-
-        .attr('fill', function(d) {
-          return fillScale(d.country)
-        })
-
-        .attr('x', function(d, di) {
-          let switchIndex = percent.findIndex(p => p.country !== 'other')
-
-          switchIndex = switchIndex >= 0 ? switchIndex + 10 : null
-
-          let reverse =
-            Math.ceil((di + 1) / 10) * 10 <= switchIndex
-              ? Math.abs(99 - di)
-              : di
-
-          let x = ((reverse % 10) * (cellSize - 2)) / 10 + parseInt(parentX, 10)
-          return x + 2
-        })
-        .attr('y', function(d, di) {
-          let y =
-            (Math.ceil((di + 1) / 10) * (cellSize - 2)) / 10 +
-            parseInt(parentY, 10) -
-            cellSize / 10 +
-            1
-          return y + 2
-        })
-        .attr('height', 0)
-        .attr('width', (cellSize - padding / 2) / 10)
-        .transition(transition().duration(600))
-        .attr('height', (cellSize - padding / 2) / 10)
     })
   }
 
@@ -460,7 +543,7 @@ function draw(data) {
           all.removeAttribute('disabled')
           all.checked = false
         } else if (country) {
-          keyFilter.push(country)
+          keyFilter.unshift(country)
         }
 
         if (keyFilter.length !== 4) {
@@ -494,7 +577,7 @@ function draw(data) {
         tooltip.hide()
       },
       click(d) {
-        //
+        container.call(chart.drawState, d)
       },
       showTooltip(d) {
         let tooltipContent = `
@@ -505,10 +588,15 @@ function draw(data) {
           $${formatter(d.totaldollars).replace(/G/, 'B')} Total Trade
         </p>
         <ul class="tooltip-list">
-          <li class="canada">Canada: ${d.canada ? formatter(d.canada) : 0}%</li>
-          <li class="china">China: ${d.china ? formatter(d.china) : 0}%</li>
-          <li class="eu">EU: ${d.eu ? formatter(d.eu) : 0}%</li>
-          <li class="mexico">Mexico: ${d.mexico ? formatter(d.mexico) : 0}%</li>
+        ${countries
+          .map(
+            c =>
+              `<li class="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}: ${
+                d[c] ? formatter(d[c]) : 0
+              }%</li>`
+          )
+          .join('')}
+
         </ul>
         <p class="tooltip-footer">
           ${formatter(d.grandtotal)}% of Total Trade
@@ -519,7 +607,7 @@ function draw(data) {
     }
   }
 
-  return { drawGridMap, drawPercents }
+  return { drawGridMap, drawPercents, drawState }
 }
 
 function init(data) {
