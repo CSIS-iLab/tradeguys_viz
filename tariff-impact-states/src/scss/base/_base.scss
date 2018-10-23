@@ -1,12 +1,12 @@
-// General
-
 body {
   --breakpoint: 'xsmall';
-  font-family: $font-hind;
-  font-size: 18px;
+  font-family: $font-source;
+  font-size: $browser-context;
   margin: 0;
   padding: 0 1rem;
-  color: $gray;
+  color: $black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   @include breakpoint('small') {
     --breakpoint: 'small';
@@ -21,16 +21,6 @@ body {
   }
 }
 
-a {
-  text-decoration: none;
-  color: $red;
-  transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
-  &:hover {
-    box-shadow: inset 0px -2px 0px 0 $dark-gray;
-  }
-}
-
 p {
   margin: 0 0 1.5rem;
 }
@@ -41,25 +31,86 @@ sup {
   top: -0.4em;
 }
 
-/*----------  Interactive Header  ----------*/
-.interactive__header {
-  .interactive__title {
-    font-family: $font_source;
-    margin: 1rem auto;
-    @include fontSize(20px);
-    line-height: 1.36;
-    letter-spacing: 1.4px;
-    color: $black;
+/*=============================
+=            Links            =
+=============================*/
 
-    font-weight: bold;
-    padding-bottom: 1.25rem;
-    border-bottom: 0;
-    text-align: center;
+%dashed-underline {
+  border-bottom: 1px dashed $black;
+}
+
+%external-links {
+  a[href*="//"]:not([href*="tradeguys.csis.org"]) {
+    position: relative;
+    margin-left: 1.5rem;
+    &::before {
+      position: absolute;
+      left: -1.5rem;
+      content: '\f39c';
+      font-family: 'tradeguys';
+    }
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+
+  &:visited {
+  }
+  &:hover,
+  &:focus,
+  &:active {
+  }
+  &:focus {
+    outline: thin dotted;
+  }
+  &:hover,
+  &:active {
+    outline: 0;
   }
 
-  p {
-    line-height: 1.78;
-    @include fontSize(16px);
-    -webkit-font-smoothing: antialiased;
+  p &,
+  .post-content ul &,
+  .post-content ol & {
+    @extend %dashed-underline;
+    @include wipe-link-hover-background($yellow);
+  }
+}
+/*=============================
+=            Lists            =
+=============================*/
+ul {
+  margin: 0;
+  padding-inline-start: 24px;
+  list-style: none;
+
+  li {
+    font-family: $font_inconsolata;
+    &:before {
+      font-family: $font_source;
+      font-weight: bold;
+      line-height: 1;
+      position: relative;
+      top: -0.1rem;
+      display: inline-block;
+      width: 1rem;
+      margin-left: -1.5rem;
+      content: '\2588';
+    }
+
+    &.china::before {
+      color: $red;
+    }
+    &.eu::before {
+      color: $blue;
+    }
+    &.mexico::before {
+      color: $orange;
+    }
+    &.canada::before {
+      color: $green;
+    }
   }
 }

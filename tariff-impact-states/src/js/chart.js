@@ -8,7 +8,7 @@ import tooltip from './tooltip'
 const formatter = format('.3s')
 const countries = ['canada', 'china', 'eu', 'mexico']
 const colors = ['#9EB040', '#FE5000', '#0AA4CF', '#F2AF19', '#fff']
-const margin = { top: 5, right: 5, bottom: 5, left: 5 }
+const margin = { top: 10, right: 5, bottom: 10, left: 5 }
 
 const container = select('.chart')
 const rows = 8
@@ -104,7 +104,7 @@ function draw(data) {
 
       percents = select(nodes[gi])
         .selectAll(`.percent.${g.code}`)
-        .data(percent)
+        .data(percent, d => d)
         .enter()
         .append('rect')
         .attr('class', function(d) {
@@ -114,6 +114,8 @@ function draw(data) {
         .attr('fill', function(d) {
           return fillScale(d.country)
         })
+        .attr('stroke-width', '0.25px')
+        .attr('stroke', '#fff')
 
         .attr('x', function(d, di) {
           let switchIndex = percent.findIndex(
@@ -169,10 +171,11 @@ function draw(data) {
   }
 
   function drawState(x, d) {
+    select('.stateModal').remove()
     let stateData = data.filter(state => state.code === d.code)
     width = drawGridMap.width()
-    height = drawGridMap.width() * 0.67
-    let stateSize = height * 0.45
+    height = drawGridMap.width()
+    let stateSize = height * 0.3
     let svg = container.selectAll('.map')
 
     container.selectAll('.gridmap')
@@ -181,26 +184,31 @@ function draw(data) {
 
     select('.stateModal')
       .append('rect')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('fill', '#000')
+      .attr('opacity', '0.3')
+
+    select('.stateModal')
+      .append('rect')
       .attr('width', width * 0.75)
-      .attr('height', height * 0.67)
+      .attr('height', height * 0.5)
       .attr('x', width / 7.5)
       .attr('y', width / 7.5)
       .attr('fill', '#fff')
       .attr('stroke', '#000')
       .attr('stroke-width', '1.5px')
       .attr('paint-order', 'stroke')
-      .attr('opacity', '0.9')
 
     select('.stateModal')
-      .append('text')
-      .text('X')
-      .attr('class', 'exit')
-      .attr('fill', '#000')
-      .attr('width', width / 10)
-      .attr('height', height / 10)
+      .append('foreignObject')
       .attr('cursor', 'pointer')
-      .attr('x', width - width / 7.5 - padding)
-      .attr('y', width / 7.5 + padding * 2)
+      .attr('width', width / 10)
+      .attr('height', height / 20)
+      .attr('x', width - width / 7.5 - padding * 2)
+      .attr('y', width / 7.5 + padding)
+      .append('xhtml:div')
+      .attr('class', 'icon-close-lg')
       .on('click', () => {
         select('.stateModal').remove()
       })
@@ -257,7 +265,7 @@ function draw(data) {
 
     let percents = select('.stateModal')
       .selectAll(`.percentModal.${stateData[0].code}`)
-      .data(percent)
+      .data(percent, d => d)
       .enter()
       .append('rect')
       .attr('class', function(d) {
@@ -297,60 +305,86 @@ function draw(data) {
 
     let column2 = parseInt(parentX, 10) + stateSize + padding
 
+    // select('.stateModal')
+    //   .selectAll(`.modalLabel`)
+    //   .data(stateData)
+    //   .enter()
+    //   .append('text')
+    //   .attr('class', 'modalLabel')
+    //   .attr('x', column2)
+    //   .attr('y', parseInt(parentY, 10) - padding)
+
+    // let details = select(`.modalLabel`)
+    //   .selectAll('tspan')
+    //   .data(stateData)
+    //   .enter()
+    //
+    // details
+    //   .append('tspan')
+    //   .text(stateData[0].state)
+    //   .attr('dy', '1.5em')
+    //   .attr('x', column2)
+    //
+    // details
+    //   .append('tspan')
+    //   .text(
+    //     `$${formatter(stateData[0].totaldollars).replace(/G/, 'B')} Total Trade`
+    //   )
+    //   .attr('dy', '1.5em')
+    //   .attr('x', column2)
+
+    // countries.forEach(c => {
+    // details
+    //   .append('tspan')
+    //   .text(
+    //     `${c.charAt(0).toUpperCase() + c.slice(1)}: ${formatter(
+    //       stateData[0][c]
+    //     )}%`
+    //   )
+    //   .attr('dy', '1.5em')
+    //   .attr('x', column2)
+    // })
+
+    //   details
+    //     .append('tspan')
+    //     .text(`${formatter(stateData[0].grandtotal)}% of Total Trade`)
+    //     .attr('dy', '1.5em')
+    //     .attr('x', column2)
+
     select('.stateModal')
-      .selectAll(`.modalLabel`)
-      .data(stateData)
-      .enter()
-      .append('text')
-      .attr('class', 'modalLabel')
+      .append('foreignObject')
       .attr('x', column2)
       .attr('y', parseInt(parentY, 10) - padding)
+      .attr('width', width - stateSize)
+      .append('xhtml:div').html(`<div class="modal-heading">
+                ${d.state}
+              </div>
+              <div class="modal-body">
+                $${formatter(d.totaldollars).replace(/G/, 'B')} Total Trade
+              </div>
+              <ul class="modal-list">
+              ${countries
+                .map(
+                  c =>
+                    `<li class="${c}">${c.charAt(0).toUpperCase() +
+                      c.slice(1)}: ${
+                      stateData[0][c] ? formatter(stateData[0][c]) : 0
+                    }%</li> `
+                )
+                .join('')}
 
-    let details = select(`.modalLabel`)
-      .selectAll('tspan')
-      .data(stateData)
-      .enter()
-
-    details
-      .append('tspan')
-      .text(stateData[0].state)
-      .attr('dy', '1.5em')
-      .attr('x', column2)
-
-    details
-      .append('tspan')
-      .text(
-        `$${formatter(stateData[0].totaldollars).replace(/G/, 'B')} Total Trade`
-      )
-      .attr('dy', '1.5em')
-      .attr('x', column2)
-
-    countries.forEach(c => {
-      details
-        .append('tspan')
-        .text(
-          `${c.charAt(0).toUpperCase() + c.slice(1)}: ${formatter(
-            stateData[0][c]
-          )}%`
-        )
-        .attr('dy', '1.5em')
-        .attr('x', column2)
-    })
-
-    details
-      .append('tspan')
-      .text(`${formatter(stateData[0].grandtotal)}% of Total Trade`)
-      .attr('dy', '1.5em')
-      .attr('x', column2)
+              </ul> <div class="modal-footer">
+                  ${formatter(d.grandtotal)}% of Total Trade
+                </div>`)
   }
 
   function drawGridMap() {
     width = drawGridMap.width()
-    height = drawGridMap.width() * 0.9
+    height = drawGridMap.width() * 0.8
     // calculate cellSize based on dimensions of svg
     cellSize = calcCellSize(
-      width - columns * padding,
-      height - columns * padding,
+      width - columns * padding - margin.right - margin.left,
+      height - columns * padding - margin.top - margin.bottom,
       columns,
       rows
     )
@@ -577,6 +611,7 @@ function draw(data) {
         tooltip.hide()
       },
       click(d) {
+        tooltip.hide()
         container.call(chart.drawState, d)
       },
       showTooltip(d) {

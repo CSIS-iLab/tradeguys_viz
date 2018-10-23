@@ -66,8 +66,13 @@ module.exports = {
     new CleanWebpackPlugin('dist', {}),
     new CopyWebpackPlugin([
       {
-        from: './src/img/cpp-logo-red.svg',
-        to: './img/cpp-logo-red.svg',
+        from: './src/img/TradeGuys_menu_logo.svg',
+        to: './img/TradeGuys_menu_logo.svg',
+        toType: 'file'
+      },
+      {
+        from: './src/img/favicon.ico',
+        to: './img/favicon.ico',
         toType: 'file'
       }
     ]),

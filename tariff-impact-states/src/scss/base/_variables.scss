@@ -1,75 +1,163 @@
-// Variables
-$white: #fff;
 $black: #000;
-$red: #ed392a;
-$dark-red: #c42d21;
-$green: #58a897;
-$bright-green: #8cb561;
-$light-blue: #83badc;
-$blue: #3b75bb;
-$purple: #a483a8;
-$dark-purple: #69518d;
-$orange: #f7890e;
-$yellow: #e7ae3f;
-$blue-gray: #728c99;
-$off-white: #f1f1f1;
-$gray: #333;
-$tooltip-gray: #808081;
-$select-blue: #455a64;
-$select-font-color: #555;
-$disabled-button-color: #4a4a4a;
-$disabled-button-bg: $off-white;
-$form-focus: $off-white;
-$dark-gray: #d4d0cb;
-$dark-blue: #1d435e;
-$grid-lines: #c5c5c5;
-$color__text-button-blue: $blue-gray;
-$color__background-button-blue: #2b3d46;
-$color__background-button-gray: #d6d6d6;
-$color__no-data: #efefef;
+$white: #fff;
+$off-white: #f7f4f1;
+$off-white-dark: #eae6e1;
+$yellow: #eae134;
+$dark-yellow: #cfc83a;
+$red: #fe5000;
+$green: #9eb040;
+$blue: #0aa4cf;
+$orange: #f2af19;
+$purple: #a1689c;
+$gray: #4a4a4a;
+$dark-gray: #353535;
+$disabled-gray: #b3b3b3;
 
-/*----------  Fonts  ----------*/
-$font-hind: 'Hind', sans-serif;
-$font-roboto: 'Roboto', sans-serif;
-$font_inconsolata: 'Inconsolata', monospace;
-$font_source: 'Source Sans Pro', sans-serif;
-$fontello_url: '../fonts/';
+$color_footer-contact-text: #e0e1e2;
+$color_footer-copyright-text: #090909;
+$color_post-list-border: $disabled-gray;
+$color_audio-player-progress-bar: $disabled-gray;
+$color_audio-player-transcript-box: $off-white-dark;
+$color_audio-player-transcript-box-shadow: rgba(0, 0, 0, 0.2);
+$color_home-trade-guy-title: #444;
+
 /*----------  Structural  ----------*/
 $size-max-width: 700px;
 
-/*----------  Custom  ----------*/
+/*----------  Fonts  ----------*/
+$font_inconsolata: 'Inconsolata', monospace;
+$font_source: 'Source Sans Pro', sans-serif;
+$fontello_url: '../fonts/';
 
-$lineColors: (
-  color--1: (
-    #f7890e,
-    darken(#f7890e, 10%)
-  ),
-  color--2: (
-    #f7d768,
-    darken(#f7d768, 10%)
-  ),
-  color--3: (
-    #59c199,
-    darken(#59c199, 10%)
-  ),
-  color--4: (
-    #a3db86,
-    darken(#a3db86, 10%)
-  ),
-  color--5: (
-    #8cb561,
-    darken(#8cb561, 10%)
-  ),
-  CHN: (
-    $red,
-    darken($red, 10%)
-  ),
-  USA: (
-    #90c7e0,
-    darken(#90c7e0, 10%)
-  ),
-  JPN: (
-    #a483a8,
-    darken(#a483a8, 10%)
-  )
-);
+@font-face {
+  font-family: 'tradeguys';
+  src: url('#{$fontello_url}tradeguys.eot?48792507');
+  src: url('#{$fontello_url}tradeguys.eot?48792507#iefix')
+      format('embedded-opentype'),
+    url('#{$fontello_url}tradeguys.woff2?48792507') format('woff2'),
+    url('#{$fontello_url}tradeguys.woff?48792507') format('woff'),
+    url('#{$fontello_url}tradeguys.ttf?48792507') format('truetype'),
+    url('#{$fontello_url}tradeguys.svg?48792507#tradeguys') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^='icon-']:before,
+[class*=' icon-']:before {
+  font-family: 'tradeguys';
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: 0.2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: 0.2em;
+
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+.icon-email:before {
+  content: '\e801';
+} /* '' */
+.icon-print:before {
+  content: '\e804';
+} /* '' */
+.icon-link:before {
+  content: '\e805';
+} /* '' */
+.icon-icon_check:before {
+  content: '\e878';
+} /* '' */
+.icon-transcript:before {
+  content: '\e89b';
+} /* '' */
+.icon-youtube:before {
+  content: '\e983';
+} /* '' */
+.icon-angle-left:before {
+  content: '\e992';
+} /* '' */
+.icon-angle-right:before {
+  content: '\e993';
+} /* '' */
+.icon-arrow-left:before {
+  content: '\e99d';
+} /* '' */
+.icon-arrow-right:before {
+  content: '\e99e';
+} /* '' */
+.icon-close-lg:before {
+  content: '\e9bd';
+} /* '' */
+.icon-plus-lg:before {
+  content: '\ea81';
+} /* '' */
+.icon-rss:before {
+  content: '\ebee';
+} /* '' */
+.icon-video:before {
+  content: '\ebf0';
+} /* '' */
+.icon-quote:before {
+  content: '\ebf1';
+} /* '' */
+.icon-menu:before {
+  content: '\ebf2';
+} /* '' */
+.icon-pause:before {
+  content: '\f00e';
+} /* '' */
+.icon-play:before {
+  content: '\f00f';
+} /* '' */
+.icon-linkedin:before {
+  content: '\f0e1';
+} /* '' */
+.icon-chart-line:before {
+  content: '\f201';
+} /* '' */
+.icon-facebook:before {
+  content: '\f231';
+} /* '' */
+.icon-google:before {
+  content: '\f234';
+} /* '' */
+.icon-twitter:before {
+  content: '\f243';
+} /* '' */
+.icon-plus:before {
+  content: '\f2c7';
+} /* '' */
+.icon-close:before {
+  content: '\f2d7';
+} /* '' */
+.icon-search:before {
+  content: '\f2f5';
+} /* '' */
+.icon-external:before {
+  content: '\f39c';
+} /* '' */
+.icon-share:before {
+  content: '\f3ac';
+} /* '' */

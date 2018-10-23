@@ -22,22 +22,54 @@ $breakpoint-xsmall: 25em;
 
 @mixin breakpoint($break) {
   @if $break == xlarge {
-    @media screen and (min-width:$breakpoint-xlarge) { @content; }
-  }
-  @else if $break == large {
-    @media screen and (min-width:$breakpoint-large) { @content; }
-  }
-  @else if $break == medium {
-    @media screen and (min-width: $breakpoint-medium) { @content; }
-  }
-  @else if $break == small {
-    @media screen and (min-width: $breakpoint-small) { @content; }
-  }
-  @else if $break == xsmall {
-    @media screen and (max-width: $breakpoint-xsmall) { @content; }
-  }@else {
+    @media screen and (min-width: $breakpoint-xlarge) {
+      @content;
+    }
+  } @else if $break == large {
+    @media screen and (min-width: $breakpoint-large) {
+      @content;
+    }
+  } @else if $break == medium {
+    @media screen and (min-width: $breakpoint-medium) {
+      @content;
+    }
+  } @else if $break == small {
+    @media screen and (min-width: $breakpoint-small) {
+      @content;
+    }
+  } @else if $break == xsmall {
+    @media screen and (max-width: $breakpoint-xsmall) {
+      @content;
+    }
+  } @else {
     @media screen and (min-width: $break) {
       @content;
     }
+  }
+}
+
+@mixin wipe-link-background($background-color: $yellow) {
+  background-image: linear-gradient(
+    to top,
+    $background-color 75%,
+    transparent 0%
+  );
+  background-position: unset;
+  background-repeat: repeat-x;
+  background-size: 100% 100%;
+}
+
+@mixin wipe-link-hover-background($background-color: $yellow, $width: 100%) {
+  width: $width;
+  background-image: linear-gradient(
+    transparent calc(20%),
+    $background-color 20%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-size: 100% 100%;
   }
 }

@@ -8,7 +8,8 @@
 	<base target="_blank">
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,600,700" rel="stylesheet">
 	<link rel="canonical" href="https://github.com/CSIS-iLab/trade_guys/blob/master/assets/_sass/vendors/fontello/_fontello.scss" data-pjax-transient="">
-	<link rel="stylesheet" href="main.ff8d091a8f0de7e3a493.css?3319a1b6ed9840739240">
+	<link rel="shortcut icon" href="img/favicon.ico" title="Favicon" />
+	<link rel="stylesheet" href="main.25a3af3c3dd58d5a44c5.css?39cee040152530e3e33e">
 </head>
 
 <body>
@@ -19,8 +20,8 @@
 
 	<section class="chart"></section>
 
-	<div class="key">
-		<div class="legend-label"><span>FILTER BY TRADE PARTNER:</span></div>
+	<div class="legend">
+		<div class="legend-title"><span>FILTER BY TRADE PARTNER:</span></div>
 		<div class="container">
 
 
@@ -54,19 +55,22 @@
 			</div>
 			<div class="legend-bar">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px">
-				<defs>
-					<linearGradient id="gradient" x1="0%" y1="0%" y2="100%" x2="0%">
-						<stop offset="0%" style="stop-color:#E5E5E5;stop-opacity:1" />
-						<stop offset="100%" style="stop-color:#5E5E5E;stop-opacity:1" />
-					</linearGradient>
-				</defs>
-				<rect  x="0" y="0" width="50" height="50" fill="url(#gradient)"/>
-				<rect  x="5" y="5" width="40" height="40" fill="#fff"/>
+					<defs>
+						<linearGradient id="gradient" x1="0%" y1="0%" y2="100%" x2="0%">
+							<stop offset="0%" style="stop-color:#5E5E5E;stop-opacity:1" />
+							<stop offset="100%" style="stop-color:#E5E5E5;stop-opacity:1" />
+						</linearGradient>
+					</defs>
 
-				<div>Total Trade Dollars<br />
+					<polygon class="cls-1" points="0 0 50 0 46 48 4 48 0 0" fill="url(#gradient)"/>
+					<polygon class="cls-2" points="5 5 45 5 44.13 46.25 6 46.25 5 5" fill="#fff"/>
+				</svg>
+
+				<div> Total Trade Dollars<br />
 					<div class="min-max">
-						MIN: <span class="min"></span><br />
-						MAX: <span class="max"></span></div>
+						MAX: <span class="max"></span><br />
+						MIN: <span class="min"></span>
+					</div>
 					</div>
 			</div>
 		</div>
@@ -80,7 +84,7 @@
 	</footer>
 	<div class="tooltip"></div>
 	<script src="https://csis-ilab.github.io/cpower-viz/globaljs/iframeSizer.contentWindow.min.js"></script>
-	<script src="main.js?3319a1b6ed9840739240"></script>
+	<script src="main.js?39cee040152530e3e33e"></script>
 </body>
 
 </html>
