@@ -7,7 +7,7 @@ body {
     margin-left: 12px;
     margin-right: 12px;
 
-    @include breakpoint('medium') {
+    @include breakpoint('small') {
       margin-left: auto;
       margin-right: auto;
     }

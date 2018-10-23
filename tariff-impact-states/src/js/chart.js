@@ -198,7 +198,7 @@ function draw(data) {
     select('.stateModal')
       .append('rect')
       .attr('width', width * 0.75)
-      .attr('height', height * 0.5)
+      .attr('height', height * 0.45)
       .attr('x', width / 7.5)
       .attr('y', width / 7.5)
       .attr('fill', '#fff')
@@ -451,7 +451,7 @@ function draw(data) {
       '--breakpoint'
     )
 
-    if (breakpoint !== '"xsmall"' && breakpoint !== '"small"') {
+    if (breakpoint !== '"xsmall"') {
       gridMap
         .selectAll('.group')
         .on('mouseover', interactions.states.mouseover)

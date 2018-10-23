@@ -12,7 +12,7 @@ section {
     }
   }
 
-  @include breakpoint('medium') {
+  @include breakpoint('small') {
     max-width: $size-max-width;
     margin-left: auto;
     margin-right: auto;
@@ -24,7 +24,7 @@ section {
       line-height: 1.6;
       @include fontSize(12.5px);
 
-      @include breakpoint('medium') {
+      @include breakpoint('small') {
         @include fontSize(18px);
       }
 
@@ -34,7 +34,7 @@ section {
         letter-spacing: 1.4px;
         @include fontSize(16px);
 
-        @include breakpoint('medium') {
+        @include breakpoint('small') {
           @include fontSize(24px);
         }
       }
@@ -61,7 +61,7 @@ section {
         font-weight: 800;
         transition: all 0.2s ease-in-out;
 
-        @include breakpoint('medium') {
+        @include breakpoint('small') {
           @include fontSize(18px);
         }
       }
@@ -93,7 +93,7 @@ section {
 .legend {
   margin: 24px 12px 12px;
 
-  @include breakpoint('medium') {
+  @include breakpoint('small') {
     margin: 24px 0 12px;
   }
 
@@ -135,7 +135,7 @@ section {
       -ms-flex-align: center;
       align-items: center;
 
-      @include breakpoint('medium') {
+      @include breakpoint('small') {
         display: -ms-flexbox;
         display: flex;
         margin-left: 36px;
@@ -173,7 +173,7 @@ section {
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 
-      @include breakpoint('medium') {
+      @include breakpoint('small') {
         -ms-flex: 0 0 calc(100% - 300px);
         flex: 0 0 calc(100% - 300px);
       }
@@ -188,7 +188,7 @@ section {
         -ms-flex: 1 0 47%;
         flex: 1 0 47%;
 
-        @include breakpoint('medium') {
+        @include breakpoint('small') {
           -ms-flex: 1 0 auto;
           flex: 1 0 auto;
           margin: 0 6px 0 0;
