@@ -1,22 +1,42 @@
 /*============================
 =            Chart           =
 ============================*/
-
+section {
+}
 .chart {
-  svg {
-    -ms-transform: transform3d(0, 0, 0);
-    transform: transform3d(0, 0, 0);
+  @media screen and (max-width: 35em) {
+    width: 105%;
 
+    foreignObject div {
+      transform: translateX(-4px);
+    }
+  }
+
+  @include breakpoint('medium') {
+    max-width: $size-max-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  svg {
     .stateModal {
       font-family: $font_inconsolata;
-      @include fontSize(18px);
       line-height: 1.6;
+      @include fontSize(12.5px);
+
+      @include breakpoint('medium') {
+        @include fontSize(18px);
+      }
 
       .modal-heading {
         font-family: $font_source;
-        @include fontSize(24px);
         font-weight: bold;
         letter-spacing: 1.4px;
+        @include fontSize(16px);
+
+        @include breakpoint('medium') {
+          @include fontSize(24px);
+        }
       }
 
       ul {
@@ -32,8 +52,7 @@
       cursor: zoom-in;
 
       .label {
-        pointer-events: none;
-        @include fontSize(18px);
+        @include fontSize(12px);
         fill: $black;
         stroke: $white;
         paint-order: stroke;
@@ -41,10 +60,23 @@
         text-transform: uppercase;
         font-weight: 800;
         transition: all 0.2s ease-in-out;
+
+        @include breakpoint('medium') {
+          @include fontSize(18px);
+        }
       }
 
       .state {
         transition: all 0.2s ease-in-out;
+        @media screen and (max-width: 35em) {
+          stroke-width: 2 !important;
+        }
+      }
+
+      .percent {
+        @media screen and (max-width: 35em) {
+          stroke-width: 0 !important;
+        }
       }
 
       &:hover .state {
@@ -59,7 +91,11 @@
 ============================*/
 
 .legend {
-  margin: 24px 0 12px;
+  margin: 24px 12px 12px;
+
+  @include breakpoint('medium') {
+    margin: 24px 0 12px;
+  }
 
   .legend-title {
     -ms-flex-preferred-size: 100%;
@@ -91,28 +127,32 @@
       font-family: $font_inconsolata;
       line-height: 1.2;
       position: relative;
-      display: -ms-flexbox;
-      display: flex;
-      width: 100%;
-      margin-left: 36px;
+      display: none;
       padding: 6px;
       background-color: $white;
-      -ms-flex: 0 0 224px;
-      flex: 0 0 224px;
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       -ms-flex-align: center;
       align-items: center;
 
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: -24px;
-        width: 1px;
-        height: 120%;
-        background-color: $black;
+      @include breakpoint('medium') {
+        display: -ms-flexbox;
+        display: flex;
+        margin-left: 36px;
+        width: 100%;
+        -ms-flex: 0 0 224px;
+        flex: 0 0 224px;
+
+        &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: -24px;
+          width: 1px;
+          height: 120%;
+          background-color: $black;
+        }
       }
 
       > div {
@@ -126,14 +166,17 @@
     }
 
     .countries {
-      -ms-flex: 0 0 calc(100% - 300px);
-      flex: 0 0 calc(100% - 300px);
       display: -ms-flexbox;
       display: flex;
       -ms-flex-align: center;
       align-items: center;
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+
+      @include breakpoint('medium') {
+        -ms-flex: 0 0 calc(100% - 300px);
+        flex: 0 0 calc(100% - 300px);
+      }
 
       .legend-item {
         @include fontSize(16px);

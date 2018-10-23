@@ -2,10 +2,15 @@
 =            Page Layout            =
 ===================================*/
 body {
-  > *:not(.tooltip) {
+  > *:not(.tooltip):not(.chart) {
     max-width: $size-max-width;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 12px;
+    margin-right: 12px;
+
+    @include breakpoint('medium') {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   .interactive__header {

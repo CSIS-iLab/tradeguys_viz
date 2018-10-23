@@ -20,6 +20,7 @@ let chart,
   width,
   height,
   cellSize,
+  activeState,
   borderColorScale,
   borderWidthScale,
   fillScale,
@@ -172,6 +173,11 @@ function draw(data) {
 
   function drawState(x, d) {
     select('.stateModal').remove()
+
+    fillScale = scaleOrdinal()
+      .domain([...countries, 'other'])
+      .range(colors)
+
     let stateData = data.filter(state => state.code === d.code)
     width = drawGridMap.width()
     height = drawGridMap.width()
@@ -227,7 +233,7 @@ function draw(data) {
         return borderWidthScale(d.totaldollars)
       })
       .attr('x', width / 5)
-      .attr('y', width / 5)
+      .attr('y', width / 5 + padding)
       .attr('width', stateSize - 3)
       .attr('height', stateSize - 2)
 
@@ -411,32 +417,14 @@ function draw(data) {
 
     selectAll('input').on('click', interactions.key.click)
 
-    let gridNodes = document.querySelectorAll('.gridlines').length
-    let grid = gridNodes ? container.selectAll('.gridlines') : svg.append('g')
-    grid
-      .attr('class', 'gridlines')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-
-    let rowNodes = document.querySelectorAll('.row').length
-    let row = rowNodes
-      ? container.selectAll('.row')
-      : grid
-          .selectAll('.row')
-          .data(gridData)
-          .enter()
-          .append('g')
-          .attr('class', 'row')
-
     let gridMapNodes = document.querySelectorAll('.gridmap').length
     let gridMap = gridMapNodes
       ? container.selectAll('.gridmap')
-      : svg
-          .append('g')
-          .attr('class', 'gridmap')
-          .attr(
-            'transform',
-            'translate(' + margin.left + ',' + margin.top + ')'
-          )
+      : svg.append('g').attr('class', 'gridmap')
+    // .attr(
+    //   'transform',
+    //   'translate(' + margin.left + ',' + margin.top + ')'
+    // )
 
     let groupNodes = document.querySelectorAll('.group').length
     let groups = groupNodes
@@ -459,8 +447,16 @@ function draw(data) {
         return (d.row - 1) * cellSize + padding * d.row
       })
 
-      .on('mouseover', interactions.states.mouseover)
-      .on('mouseleave', interactions.states.mouseleave)
+    let breakpoint = getComputedStyle(document.body).getPropertyValue(
+      '--breakpoint'
+    )
+
+    if (breakpoint !== '"xsmall"' && breakpoint !== '"small"') {
+      gridMap
+        .selectAll('.group')
+        .on('mouseover', interactions.states.mouseover)
+        .on('mouseleave', interactions.states.mouseleave)
+    }
 
     groups.each((g, gi, nodes) => {
       let stateNode = document.querySelector(`.state.${g.code}`)
@@ -562,6 +558,7 @@ function draw(data) {
   const interactions = {
     key: {
       click(d) {
+        select('.stateModal').remove()
         let excluded = ['legend-label', 'active', 'other', 'all']
 
         let classList = this.classList
@@ -574,7 +571,6 @@ function draw(data) {
 
         if (country && keyFilter.includes(country)) {
           keyFilter = keyFilter.filter(c => c !== country)
-          all.removeAttribute('disabled')
           all.checked = false
         } else if (country) {
           keyFilter.unshift(country)
@@ -582,10 +578,8 @@ function draw(data) {
 
         if (keyFilter.length !== 4) {
           all.checked = false
-          all.removeAttribute('disabled')
         } else {
           select('input.all').node().checked = true
-          all.disabled = true
         }
 
         if (isAll && isActive) {
@@ -612,6 +606,7 @@ function draw(data) {
       },
       click(d) {
         tooltip.hide()
+        activeState = d
         container.call(chart.drawState, d)
       },
       showTooltip(d) {
@@ -642,7 +637,7 @@ function draw(data) {
     }
   }
 
-  return { drawGridMap, drawPercents, drawState }
+  return { drawGridMap, drawPercents, drawState, interactions }
 }
 
 function init(data) {
@@ -652,11 +647,18 @@ function init(data) {
 }
 
 function resize() {
-  const parentWidth = container.node().offsetWidth
-  chart.drawGridMap.width(parentWidth)
-  chart.drawGridMap.height(parentWidth) * 0.9
-  container.call(chart.drawGridMap)
-  container.call(chart.drawPercents)
+  if (chart) {
+    const parentWidth = container.node().offsetWidth
+    chart.drawGridMap.width(parentWidth)
+    chart.drawGridMap.height(parentWidth) * 0.9
+    container.call(chart.drawGridMap)
+    container.call(chart.drawPercents)
+
+    if (select('.stateModal').size()) {
+      select('.stateModal').remove()
+      chart.interactions.states.click(activeState)
+    }
+  }
 }
 
 export default { init, draw, resize }
