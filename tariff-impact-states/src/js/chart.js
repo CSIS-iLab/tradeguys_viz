@@ -95,29 +95,23 @@ function draw(data) {
       let parentX = select(nodes[gi]).attr('x')
       let parentY = select(nodes[gi]).attr('y')
 
-      let percents = select(nodes[gi]).selectAll(`.percent.${g.code}`)
-
-      percents
-        .attr('height', (cellSize - padding) / 10)
-        .transition(transition().duration(1200))
-        .attr('height', 0)
-        .remove()
-
-      percents = select(nodes[gi])
+      let percents = select(nodes[gi])
         .selectAll(`.percent.${g.code}`)
         .data(percent, d => d)
+
+      percents.exit().remove()
+
+      percents
         .enter()
         .append('rect')
+        .attr('width', (cellSize - padding / 2) / 10)
+        .attr('height', (cellSize - padding / 2) / 10)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', '0.25px')
+        .merge(percents)
         .attr('class', function(d) {
           return `percent ${g.code} ${d.country}`
         })
-
-        .attr('fill', function(d) {
-          return fillScale(d.country)
-        })
-        .attr('stroke-width', '0.25px')
-        .attr('stroke', '#fff')
-
         .attr('x', function(d, di) {
           let switchIndex = percent.findIndex(
             p => ![...diff, 'other'].includes(p.country)
@@ -141,10 +135,11 @@ function draw(data) {
             1
           return y + 2
         })
-        .attr('height', 0)
-        .attr('width', (cellSize - padding / 2) / 10)
-        .transition(transition().duration(600))
-        .attr('height', (cellSize - padding / 2) / 10)
+        .transition()
+        .duration(600)
+        .attr('fill', function(d) {
+          return fillScale(d.country)
+        })
 
       let label = select(nodes[gi]).selectAll(`.label.${g.code}`)
 
