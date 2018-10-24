@@ -311,52 +311,6 @@ function draw(data) {
 
     let column2 = parseInt(parentX, 10) + stateSize + padding
 
-    // select('.stateModal')
-    //   .selectAll(`.modalLabel`)
-    //   .data(stateData)
-    //   .enter()
-    //   .append('text')
-    //   .attr('class', 'modalLabel')
-    //   .attr('x', column2)
-    //   .attr('y', parseInt(parentY, 10) - padding)
-
-    // let details = select(`.modalLabel`)
-    //   .selectAll('tspan')
-    //   .data(stateData)
-    //   .enter()
-    //
-    // details
-    //   .append('tspan')
-    //   .text(stateData[0].state)
-    //   .attr('dy', '1.5em')
-    //   .attr('x', column2)
-    //
-    // details
-    //   .append('tspan')
-    //   .text(
-    //     `$${formatter(stateData[0].totaldollars).replace(/G/, 'B')} Total Trade`
-    //   )
-    //   .attr('dy', '1.5em')
-    //   .attr('x', column2)
-
-    // countries.forEach(c => {
-    // details
-    //   .append('tspan')
-    //   .text(
-    //     `${c.charAt(0).toUpperCase() + c.slice(1)}: ${formatter(
-    //       stateData[0][c]
-    //     )}%`
-    //   )
-    //   .attr('dy', '1.5em')
-    //   .attr('x', column2)
-    // })
-
-    //   details
-    //     .append('tspan')
-    //     .text(`${formatter(stateData[0].grandtotal)}% of Total Trade`)
-    //     .attr('dy', '1.5em')
-    //     .attr('x', column2)
-
     select('.stateModal')
       .append('foreignObject')
       .attr('x', column2)
@@ -366,7 +320,10 @@ function draw(data) {
                 ${d.state}
               </div>
               <div class="modal-body">
-                $${formatter(d.totaldollars).replace(/G/, 'B')} Total Trade
+                $${formatter(d.totaldollars).replace(
+                  /G/,
+                  'B'
+                )} Total Trade (2017)
               </div>
               <ul class="modal-list">
               ${countries
@@ -380,7 +337,7 @@ function draw(data) {
                 .join('')}
 
               </ul> <div class="modal-footer">
-                  ${formatter(d.grandtotal)}% of Total Trade
+                  ${formatter(d.grandtotal)}% of Total (2017)
                 </div>`)
   }
 
@@ -615,7 +572,7 @@ function draw(data) {
           ${d.state}
         </p>
         <p class="tooltip-body">
-          $${formatter(d.totaldollars).replace(/G/, 'B')} Total Trade
+          $${formatter(d.totaldollars).replace(/G/, 'B')} Total Trade (2017)
         </p>
         <ul class="tooltip-list">
         ${countries
@@ -629,7 +586,7 @@ function draw(data) {
 
         </ul>
         <p class="tooltip-footer">
-          ${formatter(d.grandtotal)}% of Total Trade
+          ${formatter(d.grandtotal)}% of Total (2017)
         </p>
         `
         tooltip.show(tooltipContent)
