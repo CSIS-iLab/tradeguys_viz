@@ -5,7 +5,7 @@ import { on, transition, duration } from 'd3-transition'
 import { extent } from 'd3-array'
 import tooltip from './tooltip'
 
-const formatter = format('.3s')
+const formatter = format('.2f')
 const countries = ['canada', 'china', 'eu', 'mexico']
 const colors = ['#9EB040', '#FE5000', '#0AA4CF', '#F2AF19', '#fff']
 const margin = { top: 10, right: 5, bottom: 10, left: 5 }
