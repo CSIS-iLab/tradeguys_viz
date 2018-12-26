@@ -1,6 +1,9 @@
 import './scss/main.scss'
 import { extent } from 'd3-array'
 import { format } from 'd3-format'
+import { polyfill } from 'es6-promise'
+polyfill()
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
 
 import chart from './js/chart'
 const spreadsheetID = '1qmhbztaMBKatqZkT4dQQsEm_j2Xl5d9Mp3zKmmdrqy4'
@@ -9,7 +12,7 @@ const URL = `https://spreadsheets.google.com/feeds/list/${spreadsheetID}/1/publi
 let data
 
 function loadData() {
-  fetch(URL)
+  fetchPolyfill(URL)
     .then(resp => resp.json())
     .then(json => {
       data = parseData(json.feed.entry)
@@ -33,7 +36,7 @@ function parseData(rawData) {
     let stateData = {}
     Object.keys(row).forEach(c => {
       let column = c
-      if (column.includes('gsx$')) {
+      if (column.indexOf('gsx$') > -1) {
         stateData[column.replace('gsx$', '')] = row[column]['$t']
       }
     })

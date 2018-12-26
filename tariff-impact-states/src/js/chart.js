@@ -58,7 +58,7 @@ function draw(data) {
           keyFilter.forEach(country => {
             indices.push([...countries, 'other'].indexOf(country))
           })
-          return !indices.includes(i) ? '#fff' : color
+          return !(indices.indexOf(i) > -1) ? '#fff' : color
         })
       )
 
@@ -115,7 +115,7 @@ function draw(data) {
         })
         .attr('x', function(d, di) {
           let switchIndex = percent.findIndex(
-            p => ![...diff, 'other'].includes(p.country)
+            p => !([...diff, 'other'].indexOf(p.country) > -1)
           )
 
           switchIndex = switchIndex >= 0 ? switchIndex : null
@@ -280,7 +280,7 @@ function draw(data) {
 
       .attr('x', function(d, di) {
         let switchIndex = percent.findIndex(
-          p => ![...diff, 'other'].includes(p.country)
+          p => !([...diff, 'other'].indexOf(p.country) > -1)
         )
 
         switchIndex = switchIndex >= 0 ? switchIndex : null
@@ -519,10 +519,10 @@ function draw(data) {
         let isAll = classList.contains('all')
         let isActive = this.checked
         let isAllSelected = select('input.all').node().checked
-        let country = [...classList].find(c => !excluded.includes(c))
+        let country = [...classList].find(c => !(excluded.indexOf(c) > -1))
         let all = select('input.all').node()
 
-        if (country && keyFilter.includes(country)) {
+        if (country && keyFilter.indexOf(country) > -1) {
           keyFilter = keyFilter.filter(c => c !== country)
           all.checked = false
         } else if (country) {
