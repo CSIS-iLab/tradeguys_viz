@@ -5,7 +5,8 @@ import { on, transition, duration } from 'd3-transition'
 import { extent } from 'd3-array'
 import tooltip from './tooltip'
 
-const formatter = format('.2f')
+const dollarFormatter = format('.3s')
+const percentFormatter = format('.2f')
 const countries = ['canada', 'china', 'eu', 'mexico']
 const colors = ['#9EB040', '#FE5000', '#0AA4CF', '#F2AF19', '#fff']
 const margin = { top: 10, right: 5, bottom: 10, left: 5 }
@@ -315,7 +316,7 @@ function draw(data) {
                 ${d.state}
               </div>
               <div class="modal-body">
-                $${formatter(d.totaldollars).replace(
+                $${dollarFormatter(d.totaldollars).replace(
                   /G/,
                   'B'
                 )} Total Trade (2017)
@@ -326,13 +327,13 @@ function draw(data) {
                   c =>
                     `<li class="${c}">${c.charAt(0).toUpperCase() +
                       c.slice(1)}: ${
-                      stateData[0][c] ? formatter(stateData[0][c]) : 0
+                      stateData[0][c] ? percentFormatter(stateData[0][c]) : 0
                     }%</li> `
                 )
                 .join('')}
 
               </ul> <div class="modal-footer">
-                  ${formatter(d.grandtotal)}% of Total (2017)
+                  ${percentFormatter(d.grandtotal)}% of Total (2017)
                 </div>`)
   }
 
@@ -567,21 +568,24 @@ function draw(data) {
           ${d.state}
         </p>
         <p class="tooltip-body">
-          $${formatter(d.totaldollars).replace(/G/, 'B')} Total Trade (2017)
+          $${dollarFormatter(d.totaldollars).replace(
+            /G/,
+            'B'
+          )} Total Trade (2017)
         </p>
         <ul class="tooltip-list">
         ${countries
           .map(
             c =>
               `<li class="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}: ${
-                d[c] ? formatter(d[c]) : 0
+                d[c] ? percentFormatter(d[c]) : 0
               }%</li>`
           )
           .join('')}
 
         </ul>
         <p class="tooltip-footer">
-          ${formatter(d.grandtotal)}% of Total (2017)
+          ${percentFormatter(d.grandtotal)}% of Total (2017)
         </p>
         `
         tooltip.show(tooltipContent)
