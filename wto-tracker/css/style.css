@@ -680,6 +680,11 @@ table a:visited {
   text-align: center;
 }
 
+table tr > td:nth-child(5),
+table tr.shown + tr > td:last-of-type {
+  font-family: "Source Sans Pro";
+}
+
 @font-face {
   font-family: "Inconsolata";
   font-style: normal;
