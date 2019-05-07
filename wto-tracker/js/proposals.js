@@ -179,12 +179,12 @@ $(document).ready(function() {
             $(typeDatalist).append('<option value="' + type + '"></option>');
           });
 
-          if (window.webshims) {
-            webshims.setOptions("forms", {
-              customDatalist: true
-            });
-            webshims.polyfill("forms");
-          }
+          // if (window.webshims) {
+          //   webshims.setOptions("forms", {
+          //     customDatalist: true
+          //   });
+          //   webshims.polyfill("forms");
+          // }
 
           $("input.companies").on("input", function() {
             var companyVal = $.fn.dataTable.util.escapeRegex($(this).val());
