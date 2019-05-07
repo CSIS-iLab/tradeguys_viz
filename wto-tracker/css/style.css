@@ -671,7 +671,7 @@ table a:visited {
   white-space: normal !important;
   max-width: 400px;
 }
-.ws-popover {
+.ws-spopover {
   overflow: visible !important;
 }
 .dataTables_wrapper .dataTables_info {

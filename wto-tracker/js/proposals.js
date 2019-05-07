@@ -123,32 +123,32 @@ $(document).ready(function() {
           display = table.page.info().recordsDisplay + 1;
           total = table.page.info().recordsTotal + 1;
 
-          var memberDatalist = $(
-            '<select class="companies"></select>'
-          ).prependTo(".dataTables_filter");
+          // var memberDatalist = $('<select class="members"></select>').prependTo(
+          //   ".dataTables_filter"
+          // );
 
-          var memberInput =
-            '<input id="members" type="search" data-list-filter="^" data-wslist="companies" class="filter companies" list="companies">';
-
-          memberDatalist
-            .wrap("<div></div>")
-            .before('<label for="members">Member:</label>')
-            .before(memberInput);
-
-          var typeDatalist = $('<select class="types"></select>').prependTo(
-            ".dataTables_filter"
-          );
-
-          var typeInput =
-            '<input for="types" type="search" data-list-filter="^" data-wslist="types" class="filter types" list="types">';
-
-          typeDatalist
-            .wrap("<div></div>")
-            .before('<label for="types">Type:</label>')
-            .before(typeInput);
-
-          $("select.companies").wrap('<datalist id="companies"></datalist>');
-          $("select.types").wrap('<datalist id="types"></datalist>');
+          // var memberInput =
+          //   '<input id="members" type="search" data-list-filter="^" data-wslist="members" class="filter members" list="members">';
+          //
+          // memberDatalist
+          //   .wrap("<div></div>")
+          //   .before('<label for="members">Member:</label>')
+          //   .before(memberInput);
+          //
+          // var typeDatalist = $('<select class="types"></select>').prependTo(
+          //   ".dataTables_filter"
+          // );
+          //
+          // var typeInput =
+          //   '<input for="types" type="search" data-list-filter="^" data-wslist="types" class="filter types" list="types">';
+          //
+          // typeDatalist
+          //   .wrap("<div></div>")
+          //   .before('<label for="types">Type:</label>')
+          //   .before(typeInput);
+          //
+          // $("select.members").wrap('<datalist id="members"></datalist>');
+          // $("select.types").wrap('<datalist id="types"></datalist>');
 
           var members = new Set(
             sheet.rows
@@ -160,11 +160,11 @@ $(document).ready(function() {
               })
           );
 
-          Array.from(members).forEach(function(member) {
-            $(memberDatalist).append(
-              '<option value="' + member + '"></option>'
-            );
-          });
+          // Array.from(members).forEach(function(member) {
+          //   $(memberDatalist).append(
+          //     '<option value="' + member + '"></option>'
+          //   );
+          // });
 
           var types = new Set(
             sheet.rows
@@ -175,9 +175,9 @@ $(document).ready(function() {
                 return type;
               })
           );
-          Array.from(types).forEach(function(type) {
-            $(typeDatalist).append('<option value="' + type + '"></option>');
-          });
+          // Array.from(types).forEach(function(type) {
+          //   $(typeDatalist).append('<option value="' + type + '"></option>');
+          // });
 
           // if (window.webshims) {
           //   webshims.setOptions("forms", {
@@ -186,24 +186,24 @@ $(document).ready(function() {
           //   webshims.polyfill("forms");
           // }
 
-          $("input.companies").on("input", function() {
-            var companyVal = $.fn.dataTable.util.escapeRegex($(this).val());
-            if (companyVal.trim()) {
-              searchTargets("company", companyVal);
-            }
-          });
-
-          $("input.types").on("input", function() {
-            var individualVal = $.fn.dataTable.util.escapeRegex($(this).val());
-            if (individualVal.trim()) {
-              searchTargets("individual", individualVal);
-            }
-          });
+          // $("input.members").on("input", function() {
+          //   var companyVal = $.fn.dataTable.util.escapeRegex($(this).val());
+          //   if (companyVal.trim()) {
+          //     searchTargets("members", companyVal);
+          //   }
+          // });
+          //
+          // $("input.types").on("input", function() {
+          //   var individualVal = $.fn.dataTable.util.escapeRegex($(this).val());
+          //   if (individualVal.trim()) {
+          //     searchTargets("types", individualVal);
+          //   }
+          // });
 
           var filterColumns = [2, 3].map(function(c) {
             return table.column(c);
           });
-
+          makeFilter(table, filterColumns);
           var searchField = document.querySelector(
             "label input[type='search']"
           );
@@ -213,18 +213,22 @@ $(document).ready(function() {
           );
 
           $(".reset").on("click", function() {
-            []
-              .concat(_toConsumableArray(filterColumns), [table.column(12)])
-              .forEach(function(fc) {
-                return fc.search("", true, false).draw();
-              });
+            // []
+            //   .concat(_toConsumableArray(filterColumns), [table.column(12)])
+            //   .forEach(function(fc) {
+            //     return fc.search("", true, false).draw();
+            //   });
 
             searchField.value = "";
-            []
-              .concat(_toConsumableArray(document.querySelectorAll(".filter")))
-              .forEach(function(f) {
-                return (f.value = "");
-              });
+
+            // []
+            //   .concat(_toConsumableArray(document.querySelectorAll(".filter")))
+            //   .forEach(function(f) {
+            //     return (f.value = "");
+            //   });
+
+            table.search("", true, false).draw();
+
             rerender();
           });
 
@@ -282,7 +286,7 @@ $(document).ready(function() {
     if (target === "company") {
       $("input.types").val("");
     } else {
-      $("input.companies").val("");
+      $("input.members").val("");
     }
 
     table
