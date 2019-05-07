@@ -604,7 +604,7 @@ table tr.even ul li::before {
 
 table.dataTable.stripe tbody tr.odd,
 table.dataTable.display tbody tr.odd {
-  background-color: #f7f4f1;
+  background-color: rgba(247, 244, 241, 0.67);
 }
 table.dataTable.stripe tbody tr.even:hover,
 table.dataTable.display tbody tr.even:hover,
