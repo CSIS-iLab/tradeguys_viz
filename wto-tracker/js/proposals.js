@@ -213,11 +213,11 @@ $(document).ready(function() {
           );
 
           $(".reset").on("click", function() {
-            // []
-            //   .concat(_toConsumableArray(filterColumns), [table.column(12)])
-            //   .forEach(function(fc) {
-            //     return fc.search("", true, false).draw();
-            //   });
+            []
+              .concat(_toConsumableArray(filterColumns), [table.column(12)])
+              .forEach(function(fc) {
+                return fc.search("", true, false).draw();
+              });
 
             searchField.value = "";
 
