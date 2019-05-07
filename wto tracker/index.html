@@ -21,9 +21,38 @@
   <link rel="stylesheet" href="https://use.typekit.net/ubq5rrz.css">
   <link rel="stylesheet" type="text/css" href="./css/datatables.css">
 
-  <script src="js/sanctions.js"></script>
+  <script src="js/proposals.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/style.css">
 
+<style>
+table {
+width: 100%;
+margin: 2rem auto;
+}
+table thead th {
+border-bottom: 2px solid black;
+text-align: left;
+}
+table thead th {
+font-weight: bold;
+padding-bottom: 1.25rem;
+border-bottom: 0;
+text-align: center;
+}
+table tbody tr:nth-child(even) {
+background-color: #f7f4f1;
+}
+table tbody td {
+padding: 0.5rem;
+}
+table tfoot td {
+border-top: 1px solid black;
+padding: 0.5rem;
+font-size: 14px;
+line-height: 1.3;
+color: gray;
+}
+</style>
 </head>
 
 <body>
@@ -31,7 +60,7 @@
 
     <div class="loader"></div>
 
-    <table id="sanctions" class="display" style="width:100%">
+    <table id="proposals" class="display" style="width:100%">
       <thead>
         <tr>
           <th></th>

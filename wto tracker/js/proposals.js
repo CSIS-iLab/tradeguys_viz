@@ -63,8 +63,8 @@ $(document).ready(function() {
                       row["gsx$linktodocument"]["$t"] +
                       ' target="_blank">' +
                       "link to document " +
-                      "</a>" +
-                      externalLink;
+                      externalLink +
+                      "</a>";
 
                     newRow[column] = "<p>" + row[column]["$t"] + "</p>" + link;
                   } else {
@@ -86,7 +86,7 @@ $(document).ready(function() {
       });
     })
     .then(function(sheet) {
-      $("#sanctions").DataTable({
+      $("#proposals").DataTable({
         data: sheet.rows,
         columns: [
           {
@@ -123,38 +123,32 @@ $(document).ready(function() {
           display = table.page.info().recordsDisplay + 1;
           total = table.page.info().recordsTotal + 1;
 
-          var companyDatalist = $(
+          var memberDatalist = $(
             '<select class="companies"></select>'
           ).prependTo(".dataTables_filter");
 
-          var companyInput =
-            '<input id="targeted-companies" type="search" data-list-filter="^" data-wslist="companies" class="filter companies" list="companies">';
+          var memberInput =
+            '<input id="members" type="search" data-list-filter="^" data-wslist="companies" class="filter companies" list="companies">';
 
-          companyDatalist
+          memberDatalist
             .wrap("<div></div>")
-            .before(
-              '<label for="targeted-companies">Targeted Companies:</label>'
-            )
-            .before(companyInput);
+            .before('<label for="members">Member:</label>')
+            .before(memberInput);
 
-          var individualDatalist = $(
-            '<select class="individuals"></select>'
-          ).prependTo(".dataTables_filter");
+          var typeDatalist = $('<select class="types"></select>').prependTo(
+            ".dataTables_filter"
+          );
 
-          var individualInput =
-            '<input for="targeted-individuals" type="search" data-list-filter="^" data-wslist="individuals" class="filter individuals" list="individuals">';
+          var typeInput =
+            '<input for="types" type="search" data-list-filter="^" data-wslist="types" class="filter types" list="types">';
 
-          individualDatalist
+          typeDatalist
             .wrap("<div></div>")
-            .before(
-              '<label for="targeted-individuals">Targeted Individuals:</label>'
-            )
-            .before(individualInput);
+            .before('<label for="types">Type:</label>')
+            .before(typeInput);
 
           $("select.companies").wrap('<datalist id="companies"></datalist>');
-          $("select.individuals").wrap(
-            '<datalist id="individuals"></datalist>'
-          );
+          $("select.types").wrap('<datalist id="types"></datalist>');
 
           var members = new Set(
             sheet.rows
@@ -167,7 +161,7 @@ $(document).ready(function() {
           );
 
           Array.from(members).forEach(function(member) {
-            $(companyDatalist).append(
+            $(memberDatalist).append(
               '<option value="' + member + '"></option>'
             );
           });
@@ -182,9 +176,7 @@ $(document).ready(function() {
               })
           );
           Array.from(types).forEach(function(type) {
-            $(individualDatalist).append(
-              '<option value="' + type + '"></option>'
-            );
+            $(typeDatalist).append('<option value="' + type + '"></option>');
           });
 
           if (window.webshims) {
@@ -201,7 +193,7 @@ $(document).ready(function() {
             }
           });
 
-          $("input.individuals").on("input", function() {
+          $("input.types").on("input", function() {
             var individualVal = $.fn.dataTable.util.escapeRegex($(this).val());
             if (individualVal.trim()) {
               searchTargets("individual", individualVal);
@@ -245,7 +237,7 @@ $(document).ready(function() {
             this.classList.toggle("hover");
           });
 
-          $("#sanctions tbody").on("click", "td.details-control", function() {
+          $("#proposals tbody").on("click", "td.details-control", function() {
             var tr = $(this).closest("tr");
             var row = table.row(tr);
 
@@ -267,8 +259,8 @@ $(document).ready(function() {
             }
           });
 
-          $("#sanctions_filter").after(
-            '<div class="dataTables_info" id="sanctions_info" role="status" aria-live="polite"></div>'
+          $("#proposals_filter").after(
+            '<div class="dataTables_info" id="proposals_info" role="status" aria-live="polite"></div>'
           );
         }
       });
@@ -279,9 +271,9 @@ $(document).ready(function() {
     $(".dataTables_info").text(function(i, d) {
       return (
         "Showing " +
-        (results + 1 === total ? total + " sanctions" : results) +
+        (results + 1 === total ? total + " proposals" : results) +
         " " +
-        (results + 1 === total ? "" : "of " + total + " sanctions")
+        (results + 1 === total ? "" : "of " + total + " proposals")
       );
     });
     table.responsive.recalc();
@@ -289,7 +281,7 @@ $(document).ready(function() {
 
   function searchTargets(target, value) {
     if (target === "company") {
-      $("input.individuals").val("");
+      $("input.types").val("");
     } else {
       $("input.companies").val("");
     }
@@ -382,15 +374,7 @@ $(document).ready(function() {
   }
 
   function format(d) {
-    return (
-      '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-      "<tr>" +
-      "<td>" +
-      d["gsx$longdescription"] +
-      "</td>" +
-      "</tr>" +
-      "</table>"
-    );
+    return d["gsx$longdescription"];
   }
 });
 var externalLink =
