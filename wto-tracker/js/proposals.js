@@ -36,28 +36,24 @@ $(document).ready(function() {
           columns: [],
           links: []
         };
-
         json.feed.entry.filter((row, i) => {
           let newRow = {};
-          Object.keys(row).forEach(column => {
-            if (column.includes("gsx$")) {
+          Object.keys(row).forEach(function(c) {
+            if (c.includes("gsx$")) {
+              var column = row[c]["$t"];
               if (i === 0) {
-                if (column.indexOf("link") < 0) {
-                  $("thead tr").append(
-                    `<th>${column.replace("gsx$", "")}</th>`
-                  );
+                if (column.toLowerCase().indexOf("link") < 0) {
+                  $("thead tr").append(`<th>${column}</th>`);
 
                   if (
-                    !Object.values(sheet.columns.map(c => c.data)).includes(
-                      column
-                    )
+                    !Object.values(sheet.columns.map(c => c.data)).includes(c)
                   ) {
-                    sheet.columns.push({ data: column, defaultContent: "" });
+                    sheet.columns.push({ data: c, defaultContent: "" });
                   }
                 }
               } else {
-                if (column.indexOf("link") < 0) {
-                  if (column.indexOf("description") > -1) {
+                if (c.toLowerCase().indexOf("link") < 0) {
+                  if (c.toLowerCase().indexOf("description") > -1) {
                     var link =
                       "<a href=" +
                       row["gsx$linktodocument"]["$t"] +
@@ -66,9 +62,9 @@ $(document).ready(function() {
                       externalLink +
                       "</a>";
 
-                    newRow[column] = "<p>" + row[column]["$t"] + "</p>" + link;
+                    newRow[c] = "<p>" + row[c]["$t"] + "</p>" + link;
                   } else {
-                    newRow[column] = row[column]["$t"];
+                    newRow[c] = row[c]["$t"];
                   }
                 }
               }
@@ -98,7 +94,7 @@ $(document).ready(function() {
         ].concat(sheet.columns),
         fixedHeader: true,
         responsive: { details: false },
-        paging: false,
+        pagingType: "simple",
         order: [[1, "desc"]],
         columnDefs: [
           {
@@ -116,39 +112,13 @@ $(document).ready(function() {
         ],
 
         initComplete: function initComplete() {
+          $(".dataTables_length").remove();
           $(".loader").hide();
           table = this.api();
 
           page = table.page.info().page + 1;
           display = table.page.info().recordsDisplay + 1;
           total = table.page.info().recordsTotal + 1;
-
-          // var memberDatalist = $('<select class="members"></select>').prependTo(
-          //   ".dataTables_filter"
-          // );
-
-          // var memberInput =
-          //   '<input id="members" type="search" data-list-filter="^" data-wslist="members" class="filter members" list="members">';
-          //
-          // memberDatalist
-          //   .wrap("<div></div>")
-          //   .before('<label for="members">Member:</label>')
-          //   .before(memberInput);
-          //
-          // var typeDatalist = $('<select class="types"></select>').prependTo(
-          //   ".dataTables_filter"
-          // );
-          //
-          // var typeInput =
-          //   '<input for="types" type="search" data-list-filter="^" data-wslist="types" class="filter types" list="types">';
-          //
-          // typeDatalist
-          //   .wrap("<div></div>")
-          //   .before('<label for="types">Type:</label>')
-          //   .before(typeInput);
-          //
-          // $("select.members").wrap('<datalist id="members"></datalist>');
-          // $("select.types").wrap('<datalist id="types"></datalist>');
 
           var members = new Set(
             sheet.rows
@@ -160,12 +130,6 @@ $(document).ready(function() {
               })
           );
 
-          // Array.from(members).forEach(function(member) {
-          //   $(memberDatalist).append(
-          //     '<option value="' + member + '"></option>'
-          //   );
-          // });
-
           var types = new Set(
             sheet.rows
               .map(function(row) {
@@ -176,29 +140,6 @@ $(document).ready(function() {
               })
           );
           // Array.from(types).forEach(function(type) {
-          //   $(typeDatalist).append('<option value="' + type + '"></option>');
-          // });
-
-          // if (window.webshims) {
-          //   webshims.setOptions("forms", {
-          //     customDatalist: true
-          //   });
-          //   webshims.polyfill("forms");
-          // }
-
-          // $("input.members").on("input", function() {
-          //   var companyVal = $.fn.dataTable.util.escapeRegex($(this).val());
-          //   if (companyVal.trim()) {
-          //     searchTargets("members", companyVal);
-          //   }
-          // });
-          //
-          // $("input.types").on("input", function() {
-          //   var individualVal = $.fn.dataTable.util.escapeRegex($(this).val());
-          //   if (individualVal.trim()) {
-          //     searchTargets("types", individualVal);
-          //   }
-          // });
 
           var filterColumns = [2, 3].map(function(c) {
             return table.column(c);
@@ -220,12 +161,6 @@ $(document).ready(function() {
               });
 
             searchField.value = "";
-
-            // []
-            //   .concat(_toConsumableArray(document.querySelectorAll(".filter")))
-            //   .forEach(function(f) {
-            //     return (f.value = "");
-            //   });
 
             table.search("", true, false).draw();
 
@@ -270,15 +205,15 @@ $(document).ready(function() {
     });
 
   function rerender() {
-    var results = table.page.info().end;
-    $(".dataTables_info").text(function(i, d) {
-      return (
-        "Showing " +
-        (results + 1 === total ? total + " proposals" : results) +
-        " " +
-        (results + 1 === total ? "" : "of " + total + " proposals")
-      );
-    });
+    // var results = table.page.info().end;
+    // $(".dataTables_info").text(function(i, d) {
+    //   return (
+    //     "Showing " +
+    //     (results + 1 === total ? total + " entries" : results) +
+    //     " " +
+    //     (results + 1 === total ? "" : "of " + total + " entries")
+    //   );
+    // });
     table.responsive.recalc();
   }
 
