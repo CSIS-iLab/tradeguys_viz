@@ -203,7 +203,6 @@ $(document).ready(function() {
           var filterColumns = [2, 3].map(function(c) {
             return table.column(c);
           });
-          makeFilter(table, filterColumns);
 
           var searchField = document.querySelector(
             "label input[type='search']"
