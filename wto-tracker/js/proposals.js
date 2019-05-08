@@ -53,7 +53,7 @@ $(document).ready(function() {
                 }
               } else {
                 if (c.toLowerCase().indexOf("link") < 0) {
-                  if (c.toLowerCase().indexOf("description") > -1) {
+                  if (c === "gsx$description") {
                     var link =
                       "<a href=" +
                       row["gsx$linktodocument"]["$t"] +
@@ -62,7 +62,8 @@ $(document).ready(function() {
                       externalLink +
                       "</a>";
 
-                    newRow[c] = "<p>" + row[c]["$t"] + "</p>" + link;
+                    newRow[c] =
+                      "<p>" + row[c]["$t"] + "</p>" + "<p>" + link + "</p>";
                   } else {
                     newRow[c] = row[c]["$t"];
                   }
@@ -298,7 +299,11 @@ $(document).ready(function() {
   }
 
   function format(d) {
-    return d["gsx$longdescription"];
+    var table = document.querySelector("table.dataTable");
+
+    return table.offsetWidth > 700
+      ? d["gsx$longdescription"]
+      : d["gsx$description"] + d["gsx$longdescription"];
   }
 });
 var externalLink =
