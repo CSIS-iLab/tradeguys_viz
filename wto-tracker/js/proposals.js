@@ -187,12 +187,13 @@ $(document).ready(function() {
 
               $(row.child()[0])
                 .find("td")
-                .attr("colspan", "5")
+                .attr("colspan", "3")
                 .attr("scope", "colgroup");
 
               $(row.child()[0])
                 .find("td")
-                .before("<td>&nbsp;</td>");
+                .before("<td>&nbsp;</td><td>&nbsp;</td>");
+
               tr.addClass("shown");
             }
           });

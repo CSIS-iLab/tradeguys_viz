@@ -373,7 +373,7 @@ footer a {
 }
 
 .dataTables_wrapper .dataTables_filter input:focus {
-  background: rgba(255, 255, 255, 1);
+  background: white;
 }
 
 .dataTables_wrapper .dataTables_filter option:not(:first-of-type) {
@@ -516,7 +516,7 @@ table ul li::before {
 }
 
 table.dataTable {
-  border-spacing: 6px;
+  border-spacing: 2px 6px;
 }
 
 table.dataTable.display tbody td {
@@ -553,16 +553,18 @@ table.dataTable thead .sorting_desc {
   background-position: right 6px;
 }
 
-table th {
+table.dataTable thead th {
   font-family: "Inconsolata";
-  font-size: 0.9rem;
+  font-size: 1rem;
   letter-spacing: 1px;
-  font-weight: 200 !important;
   line-height: 1.31;
   text-transform: uppercase;
+  border-bottom: 2px solid #000;
+  text-align: left;
+  letter-spacing: 1.4px;
 }
 
-table th:not(:first-child) {
+table.dataTable thead th:not(:first-child) {
   background-color: #eae134;
   color: black;
   padding: 8px 10px;
@@ -602,32 +604,40 @@ table tr.even ul li::before {
   color: black;
 }
 
+table.dataTable.stripe tbody tr.even,
+table.dataTable.display tbody tr.even {
+  background-color: rgba(247, 244, 241, 0.5);
+}
 table.dataTable.stripe tbody tr.odd,
 table.dataTable.display tbody tr.odd {
-  background-color: rgba(247, 244, 241, 0.67);
+  background-color: #f5f2ed;
 }
 table.dataTable.stripe tbody tr.even:hover,
 table.dataTable.display tbody tr.even:hover,
 table.dataTable.stripe tbody tr.odd:hover,
-table.dataTable.display tbody tr.odd:hover {
-  background-color: #f5f2ed;
+table.dataTable.display tbody tr.odd:hover,
+table.dataTable.display tbody tr:hover > .sorting_1,
+table.dataTable.order-column.hover tbody tr:hover > .sorting_1 {
+  background-color: white;
 }
 
-table tr.shown td:nth-child(1) {
-  background-color: #f5f2ed;
+table.dataTable.display tr.shown.even > .sorting_1,
+table.dataTable.display tr.shown.odd > .sorting_1,
+table tr.shown td,
+table tr.shown + tr > td {
+  background-color: white;
+}
+table tr > td:nth-child(5) p,
+table tr.shown + tr > td:last-of-type p {
+  max-width: 700px;
 }
 
-table tr.shown td:nth-child(n + 2) {
-  background-color: #f5f2ed !important;
+table tr.shown + tr > td {
+  border-bottom: 36px solid white;
 }
-
-table tr.shown + tr > td:first-of-type {
-  /* background-color: rgba(255, 255, 255, 1); */
-}
-
-table tr.shown + tr > td:last-of-type {
-  background-color: #f5f2ed;
-  border: 3px solid #eae134;
+table tr.shown td,
+table tr.shown + tr + tr td {
+  border-top: 2px solid black !important;
 }
 
 table tr.shown + tr > td > div {
