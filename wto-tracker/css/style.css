@@ -361,14 +361,13 @@ footer a {
 
 .dataTables_wrapper .dataTables_filter input {
   -webkit-appearance: none;
-  background: rgba(255, 255, 255, 0.5);
   border: none;
   font-size: 0.9rem;
   padding-left: 3px;
   transition: all 0.2s ease-in-out;
   width: 100%;
   margin-left: 0;
-  background-color: #f7f4f1;
+  /* background-color: #f7f4f1; */
   border: 1px solid #b3b3b3;
 }
 
@@ -388,7 +387,9 @@ footer a {
 /*============================
 =           Button           =
 ============================*/
-button {
+button,
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  font-size: 0.8rem;
   cursor: pointer;
   font-family: "Inconsolata";
   font-weight: bold;
@@ -397,81 +398,36 @@ button {
   text-transform: uppercase;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
     border 0.2s ease-in-out;
-}
-
-button {
+  padding: 16px 18px;
   background-color: transparent;
-  margin: 24px 0 0;
 }
 
 button.reset {
-  padding: 16px 18px;
+  margin: 24px 0 0;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+  margin: 0 6px 0;
+}
+
+button.reset,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
   border: 3px solid black;
   color: black;
 }
 
-button.reset:hover {
+button.reset:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button:not(.disabled) {
   background-color: black;
   border: 3px solid black;
-  color: white;
+  color: white !important;
 }
 
-button.view-all {
-  background-color: #eae134;
-  border: none;
-  color: black;
-  display: block;
-  margin: 2.5rem auto auto;
-  padding: 8px 9px;
-  position: relative;
-  width: 200px;
-}
-
-button.view-all.up {
-  top: 12px;
-}
-
-button.view-all.down {
-  top: -12px;
-}
-
-button.view-all:hover {
-  background-color: black;
-  color: black;
-}
-
-button.view-all.down:after,
-button.view-all.up:before {
-  content: "";
-  display: block;
-  position: absolute;
-  transition: border-bottom 0.2s ease-in-out, border-top 0.2s ease-in-out,
-    color 0.2s ease-in-out;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-right: 100px solid transparent;
-  border-left: 100px solid transparent;
-}
-
-button.view-all.down:after {
-  top: 100%;
-  border-top: 20px solid #eae134;
-  border-bottom: 0 solid transparent;
-}
-
-button.view-all.up:before {
-  top: -20px;
-  border-bottom: 20px solid #eae134;
-  border-top: 0 solid transparent;
-}
-
-button.view-all.up:hover:before {
-  border-bottom: 20px solid white;
-}
-
-button.view-all.down:hover:after {
-  border-top: 20px solid white;
+.dataTables_wrapper .dataTables_paginate .paginate_button:not(.disabled):hover {
+  background: #555;
+  border: 3px solid #555;
 }
 
 /*============================
