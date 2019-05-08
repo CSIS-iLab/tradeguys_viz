@@ -113,6 +113,8 @@ $(document).ready(function() {
 
         initComplete: function initComplete() {
           $(".dataTables_length").remove();
+          $(".dataTables_filter").after($(".dataTables_info"));
+
           $(".loader").hide();
           table = this.api();
 
@@ -164,11 +166,11 @@ $(document).ready(function() {
 
             table.search("", true, false).draw();
 
-            rerender();
+            table.responsive.recalc();
           });
 
           searchField.addEventListener("keydown", function() {
-            rerender();
+            table.responsive.recalc();
           });
 
           $("tr").hover(function() {
@@ -197,26 +199,9 @@ $(document).ready(function() {
               tr.addClass("shown");
             }
           });
-
-          $("#proposals_filter").after(
-            '<div class="dataTables_info" id="proposals_info" role="status" aria-live="polite"></div>'
-          );
         }
       });
     });
-
-  function rerender() {
-    // var results = table.page.info().end;
-    // $(".dataTables_info").text(function(i, d) {
-    //   return (
-    //     "Showing " +
-    //     (results + 1 === total ? total + " entries" : results) +
-    //     " " +
-    //     (results + 1 === total ? "" : "of " + total + " entries")
-    //   );
-    // });
-    table.responsive.recalc();
-  }
 
   function searchTargets(target, value) {
     if (target === "company") {
@@ -230,7 +215,7 @@ $(document).ready(function() {
       .search("(" + value + "*)", true, false)
       .draw();
 
-    rerender();
+    table.responsive.recalc();
   }
 
   function makeFilter(table, array) {
@@ -281,11 +266,11 @@ $(document).ready(function() {
         // $(input).blur();
         $("table").removeClass("hide");
         $(".dataTables_info").removeClass("hide");
-        rerender();
+        table.responsive.recalc();
       }
 
       $(".sorting_asc").on("click", function() {
-        rerender();
+        table.responsive.recalc();
       });
 
       var newArray = [].concat.apply(
