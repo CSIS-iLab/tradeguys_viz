@@ -312,6 +312,7 @@ function draw(data) {
       .attr('x', column2)
       .attr('y', parseInt(parentY, 10) - padding)
       .attr('width', width - stateSize)
+      .attr('height', height)
       .append('xhtml:div').html(`<div class="modal-heading">
                 ${d.state}
               </div>
